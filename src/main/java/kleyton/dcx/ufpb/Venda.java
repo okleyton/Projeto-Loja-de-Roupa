@@ -5,9 +5,13 @@ import java.util.Collection;
 
 public interface Venda {
 
-    boolean cadastrarRoupa(String nome, String tamanho, double preco);
-    Collection<Roupa> pesquisarPorTamanho(String tamanho);
-    boolean removerRoupa(String nome) throws RoupaInexistenteException;
+    boolean cadastrarRoupa(Roupa roupa);
+
+    Roupa pesquisarRoupa(String codigo) throws Exception;
+
+    Collection<Roupa> listarRoupas();
+
     void salvarDados() throws IOException;
+
     void recuperarDados() throws IOException;
 }

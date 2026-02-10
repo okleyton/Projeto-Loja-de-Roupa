@@ -1,18 +1,41 @@
 package kleyton.dcx.ufpb.controller;
 
-import java.util.Collection;
-import kleyton.dcx.ufpb.VendaRoupas;
 import kleyton.dcx.ufpb.Roupa;
+import kleyton.dcx.ufpb.Venda;
 
-public class VendaSearchController {
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-    private VendaRoupas venda;
+public class VendaSearchController implements ActionListener {
 
-    public VendaSearchController(VendaRoupas venda) {
+    private Venda venda;
+
+    public VendaSearchController(Venda venda) {
         this.venda = venda;
     }
 
-    public Collection<Roupa> pesquisarPorTamanho(String tamanho) {
-        return venda.pesquisarPorTamanho(tamanho);
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+        String codigo = JOptionPane.showInputDialog("Código da roupa:");
+        if (codigo == null) return;
+
+        try {
+            Roupa roupa = venda.pesquisarRoupa(codigo);
+
+            JOptionPane.showMessageDialog(null,
+                    "Código: " + roupa.getCodigo() +
+                            "\nNome: " + roupa.getNome() +
+                            "\nTamanho: " + roupa.getTamanho() +
+                            "\nPreço: R$ " + roupa.getPreco()
+            );
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null,
+                    ex.getMessage(),
+                    "Erro",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

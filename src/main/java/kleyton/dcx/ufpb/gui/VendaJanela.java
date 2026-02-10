@@ -1,65 +1,65 @@
 package kleyton.dcx.ufpb.gui;
 
+import kleyton.dcx.ufpb.Venda;
+import kleyton.dcx.ufpb.VendaRoupas;
+import kleyton.dcx.ufpb.controller.VendaSearchController;
+import kleyton.dcx.ufpb.controller.VendaAddController;
+
 import javax.swing.*;
-import java.awt.*;
 
 public class VendaJanela extends JFrame {
 
     public VendaJanela() {
+
+        Venda venda = new VendaRoupas();
+
         setTitle("Alpha Store");
-        setSize(700, 500);
+        setSize(500, 350);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        setLayout(new BorderLayout());
+        JPanel painel = new JPanel();
+        painel.setLayout(new BoxLayout(painel, BoxLayout.Y_AXIS));
 
-        // TÍTULO
-        JLabel titulo = new JLabel("Minha Loja de Roupas", SwingConstants.CENTER);
-        titulo.setFont(new Font("Arial", Font.BOLD, 22));
-        add(titulo, BorderLayout.NORTH);
-
-        // IMAGEM
+        // ===== IMAGEM =====
         ImageIcon icon = new ImageIcon(
-                VendaJanela.class.getResource("/imgs/alpha_store.png")
+                getClass().getResource("/imgs/alpha_store.png")
         );
-        JLabel imagem = new JLabel(icon);
-        imagem.setHorizontalAlignment(SwingConstants.CENTER);
-        add(imagem, BorderLayout.CENTER);
 
-        // PAINEL DE BOTÕES
+        JLabel labelImagem = new JLabel(icon);
+        labelImagem.setAlignmentX(CENTER_ALIGNMENT);
+        painel.add(labelImagem);
+
+        // ===== BOTÕES =====
         JPanel painelBotoes = new JPanel();
 
-        JButton btnCadastrar = new JButton("Cadastrar Roupa");
-        JButton btnListar = new JButton("Listar Roupas");
+        JButton btnCadastrar = new JButton("Cadastrar roupa");
+        btnCadastrar.addActionListener(new VendaAddController(venda));
+
+        JButton btnPesquisar = new JButton("Pesquisar roupa");
+        btnPesquisar.addActionListener(new VendaSearchController(venda));
+
+        JButton btnSair = new JButton("Sair");
+        btnSair.addActionListener(e -> {
+            try {
+                venda.salvarDados();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            System.exit(0);
+        });
 
         painelBotoes.add(btnCadastrar);
-        painelBotoes.add(btnListar);
+        painelBotoes.add(btnPesquisar);
+        painelBotoes.add(btnSair);
 
-        add(painelBotoes, BorderLayout.SOUTH);
+        painel.add(painelBotoes);
 
-        // AÇÕES
-        btnCadastrar.addActionListener(e -> cadastrarRoupa());
-        btnListar.addActionListener(e -> listarRoupas());
+        add(painel);
+        setVisible(true);
     }
 
-    private void cadastrarRoupa() {
-        String nome = JOptionPane.showInputDialog(this, "Nome da roupa:");
-        String tamanho = JOptionPane.showInputDialog(this, "Tamanho:");
-        String preco = JOptionPane.showInputDialog(this, "Preço:");
-
-        JOptionPane.showMessageDialog(
-                this,
-                "Roupa cadastrada!\n" +
-                        "Nome: " + nome +
-                        "\nTamanho: " + tamanho +
-                        "\nPreço: " + preco
-        );
-    }
-
-    private void listarRoupas() {
-        JOptionPane.showMessageDialog(
-                this,
-                "Nenhuma roupa cadastrada ainda."
-        );
+    public static void main(String[] args) {
+        new VendaJanela();
     }
 }

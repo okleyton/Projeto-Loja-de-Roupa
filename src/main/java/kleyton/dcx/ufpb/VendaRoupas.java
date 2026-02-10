@@ -1,9 +1,14 @@
 package kleyton.dcx.ufpb;
 
 import java.io.IOException;
-import java.util.*;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
-public class VendaRoupas {
+public class VendaRoupas implements Venda, Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private Map<String, Roupa> roupas;
     private GravadorDeDados gravador;
@@ -11,39 +16,44 @@ public class VendaRoupas {
     public VendaRoupas() {
         this.roupas = new HashMap<>();
         this.gravador = new GravadorDeDados();
+
+        try {
+            recuperarDados();
+        } catch (IOException e) {
+            System.out.println("Arquivo ainda não existe.");
+        }
     }
 
-    public boolean cadastrarRoupa(String nome, String tamanho, double preco) {
-        if (!roupas.containsKey(nome)) {
-            roupas.put(nome, new Roupa(nome, tamanho, preco));
-            return true;
+    @Override
+    public boolean cadastrarRoupa(Roupa roupa) {
+        if (roupas.containsKey(roupa.getCodigo())) {
+            return false;
         }
-        return false;
-    }
-
-    public boolean removerRoupa(String nome) throws RoupaInexistenteException {
-        if (!roupas.containsKey(nome)) {
-            throw new RoupaInexistenteException("Roupa não encontrada: " + nome);
-        }
-        roupas.remove(nome);
+        roupas.put(roupa.getCodigo(), roupa);
         return true;
     }
 
-    public Collection<Roupa> pesquisarPorTamanho(String tamanho) {
-        Collection<Roupa> resultado = new ArrayList<>();
-        for (Roupa r : roupas.values()) {
-            if (r.getTamanho().equalsIgnoreCase(tamanho)) {
-                resultado.add(r);
-            }
+    @Override
+    public Roupa pesquisarRoupa(String codigo) throws Exception {
+        Roupa roupa = roupas.get(codigo);
+        if (roupa == null) {
+            throw new Exception("Roupa não encontrada!");
         }
-        return resultado;
+        return roupa;
     }
 
+    @Override
+    public Collection<Roupa> listarRoupas() {
+        return roupas.values();
+    }
+
+    @Override
     public void salvarDados() throws IOException {
-        gravador.salvarRoupas(roupas);
+        gravador.salvarDados(roupas);
     }
 
+    @Override
     public void recuperarDados() throws IOException {
-        this.roupas = gravador.recuperarRoupas();
+        this.roupas = gravador.recuperarDados();
     }
 }

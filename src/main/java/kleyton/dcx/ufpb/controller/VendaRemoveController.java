@@ -1,17 +1,26 @@
 package kleyton.dcx.ufpb.controller;
 
 import kleyton.dcx.ufpb.VendaRoupas;
-import kleyton.dcx.ufpb.RoupaInexistenteException;
 
-public class VendaRemoveController {
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class VendaRemoveController implements ActionListener {
 
     private VendaRoupas venda;
 
-    public VendaRemoveController(VendaRoupas venda) {
+    public VendaRemoveController(VendaRoupas venda) { // ✅
         this.venda = venda;
     }
 
-    public boolean remover(String nome) throws RoupaInexistenteException {
-        return venda.removerRoupa(nome);
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        JOptionPane.showMessageDialog(
+                null,
+                "Remoção de roupa ainda não implementada",
+                "Aviso",
+                JOptionPane.INFORMATION_MESSAGE
+        );
     }
 }

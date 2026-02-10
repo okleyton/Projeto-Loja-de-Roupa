@@ -1,30 +1,32 @@
 package kleyton.dcx.ufpb;
 
 import java.io.*;
-import java.util.HashMap;
 import java.util.Map;
 
 public class GravadorDeDados {
 
-    private static final String ARQUIVO_ROUPAS = "roupas.dat";
+    private final String arquivo = "roupas.dat";
 
-    public void salvarRoupas(Map<String, Roupa> roupas) throws IOException {
-        ObjectOutputStream oos = new ObjectOutputStream(
-                new FileOutputStream(ARQUIVO_ROUPAS));
+    public void salvarDados(Map<String, Roupa> roupas) throws IOException {
+        ObjectOutputStream oos =
+                new ObjectOutputStream(new FileOutputStream(arquivo));
         oos.writeObject(roupas);
         oos.close();
     }
 
     @SuppressWarnings("unchecked")
-    public Map<String, Roupa> recuperarRoupas() throws IOException {
+    public Map<String, Roupa> recuperarDados() throws IOException {
         try {
-            ObjectInputStream ois = new ObjectInputStream(
-                    new FileInputStream(ARQUIVO_ROUPAS));
-            Map<String, Roupa> roupas = (HashMap<String, Roupa>) ois.readObject();
+            ObjectInputStream ois =
+                    new ObjectInputStream(new FileInputStream(arquivo));
+            Map<String, Roupa> roupas =
+                    (Map<String, Roupa>) ois.readObject();
             ois.close();
             return roupas;
         } catch (ClassNotFoundException e) {
             throw new IOException(e);
+        } catch (FileNotFoundException e) {
+            return new java.util.HashMap<>();
         }
     }
 }
