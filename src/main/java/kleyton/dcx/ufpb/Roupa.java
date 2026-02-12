@@ -7,30 +7,31 @@ public class Roupa implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String codigo;
-    private String nome;
-    private String tamanho;
-    private double preco;
+    private String descricao;
+    private double valor;
 
-    public Roupa(String codigo, String nome, String tamanho, double preco) {
+    public Roupa(String codigo, String descricao, double valor) {
         this.codigo = codigo;
-        this.nome = nome;
-        this.tamanho = tamanho;
-        this.preco = preco;
+        this.descricao = descricao;
+        this.valor = valor;
     }
 
     public String getCodigo() {
         return codigo;
     }
 
-    public String getNome() {
-        return nome;
+    public String getDescricao() {
+        return descricao;
     }
 
-    public String getTamanho() {
-        return tamanho;
+    public double getValor() {
+        return valor;
     }
 
-    public double getPreco() {
-        return preco;
+    @Override
+    public String toString() {
+        return "Código: " + codigo +
+                "\nDescrição: " + descricao +
+                "\nValor: R$ " + valor;
     }
 }
